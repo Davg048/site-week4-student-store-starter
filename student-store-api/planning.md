@@ -227,6 +227,25 @@ transaction opens, so we return `404` and never create a half-built order.
 
 _(Filled in as milestones are completed — schema translation notes, route behavior changes, etc.)_
 
+### Decisions Log — Product Model (Milestone 1)
+
+- **Schema translation that went smoothly**: `price` as `Float` mapped cleanly to Postgres
+  `DOUBLE PRECISION`, and `id Int @id @default(autoincrement())` became `SERIAL PRIMARY KEY` —
+  no manual ID handling needed. The `@map("image_url")` / `@@map("products")` annotations let
+  the camelCase code coexist with the rubric's required snake_case columns exactly as planned.
+
+- **Field decision made during implementation that wasn't in the spec**: kept `imageUrl`
+  optional (`String?`) so a product can be created without an image. POST validation therefore
+  checks `name`, `description`, `price`, and `category` but intentionally **not** `imageUrl`.
+
+- **Route behavior that needed handling beyond the spec**: PUT/DELETE on a nonexistent id throws
+  Prisma error code `P2025`. The spec said "return 404," but didn't say how to detect it — so
+  the handlers catch `err.code === "P2025"` and translate it into the documented 404 response.
+
+- **Tooling note**: had to pin the Prisma CLI to `^6.7.0` (`npm i -D prisma@^6.7.0`) because
+  `npx prisma` auto-fetched Prisma 7, which rejects the v6-style `datasource { url = ... }`.
+  The CLI must match `@prisma/client@^6`.
+
 ## Spec Reconciliation
 
 _(Schema audit in Milestone 4; full-system audit in Milestone 6.)_

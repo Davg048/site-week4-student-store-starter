@@ -1,30 +1,96 @@
 // src/server.js
 // The entry point for the Student Store backend.
-// Milestone 0: a minimal Express server with a single root route so we can
-// confirm the server boots and responds. We'll add real routes in later milestones.
 
-// 1. Import the Express library (installed via npm).
 const express = require("express")
+const Product = require("./models/product")
 
-// 2. Create an Express application instance. `app` is the object we hang routes off of.
 const app = express()
-
-// 3. Pick a port. Use the host's PORT env var if it sets one (Render does this in
-//    deployment); otherwise fall back to 3001 for local development.
 const PORT = process.env.PORT || 3001
 
-// 4. Middleware: automatically parse incoming JSON request bodies into `req.body`.
-//    We don't need it for the root route, but every POST/PUT endpoint we build later
-//    will rely on it, so we wire it up once here.
+// Parse incoming JSON request bodies into req.body for every POST/PUT request.
 app.use(express.json())
 
-// 5. Root route — a simple health check. A GET request to "/" returns a JSON message.
+// Root route — a simple health check.
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Student Store API is running 🚀" })
 })
 
-// 6. Start listening for incoming HTTP requests on PORT.
-//    The callback runs once the server has successfully bound to the port.
+// ---------------------------------------------------------------------------
+// PRODUCT ROUTES (Milestone 1)
+// ---------------------------------------------------------------------------
+
+// GET /products — list all products.
+app.get("/products", async (req, res) => {
+  try {
+    const products = await Product.list()
+    res.status(200).json(products)
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch products" })
+  }
+})
+
+// GET /products/:id — fetch a single product by id.
+app.get("/products/:id", async (req, res) => {
+  try {
+    const product = await Product.getById(req.params.id)
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" })
+    }
+    res.status(200).json(product)
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch product" })
+  }
+})
+
+// POST /products — create a new product.
+app.post("/products", async (req, res) => {
+  try {
+    const { name, description, price, imageUrl, category } = req.body
+
+    // Basic validation: required fields must be present.
+    if (!name || !description || price === undefined || !category) {
+      return res.status(400).json({
+        error: "Missing required field(s): name, description, price, category",
+      })
+    }
+
+    const product = await Product.create({ name, description, price, imageUrl, category })
+    res.status(201).json(product)
+  } catch (err) {
+    res.status(500).json({ error: "Failed to create product" })
+  }
+})
+
+// PUT /products/:id — update an existing product.
+app.put("/products/:id", async (req, res) => {
+  try {
+    const product = await Product.update(req.params.id, req.body)
+    res.status(200).json(product)
+  } catch (err) {
+    // Prisma throws P2025 when the record to update does not exist.
+    if (err.code === "P2025") {
+      return res.status(404).json({ error: "Product not found" })
+    }
+    res.status(500).json({ error: "Failed to update product" })
+  }
+})
+
+// DELETE /products/:id — remove a product.
+app.delete("/products/:id", async (req, res) => {
+  try {
+    const product = await Product.delete(req.params.id)
+    res.status(200).json({ message: "Product deleted", product })
+  } catch (err) {
+    // Prisma throws P2025 when the record to delete does not exist.
+    if (err.code === "P2025") {
+      return res.status(404).json({ error: "Product not found" })
+    }
+    res.status(500).json({ error: "Failed to delete product" })
+  }
+})
+
+// ---------------------------------------------------------------------------
+
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`)
 })
