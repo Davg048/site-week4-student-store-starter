@@ -7,9 +7,23 @@
 const prisma = require("../db/db")
 
 class Product {
-  // READ ALL — return every product in the table.
-  static async list() {
-    return await prisma.product.findMany()
+  // READ ALL — return products, optionally filtered by category and/or sorted.
+  // options: { category?: string, sort?: "price" | "name" }
+  static async list({ category, sort } = {}) {
+    // Build the Prisma query piece by piece so we only add what was requested.
+    const query = {}
+
+    // Filtering: only add a `where` clause if a category was provided.
+    if (category) {
+      query.where = { category }
+    }
+
+    // Sorting: only allow the fields we documented in the spec.
+    if (sort === "price" || sort === "name") {
+      query.orderBy = { [sort]: "asc" }
+    }
+
+    return await prisma.product.findMany(query)
   }
 
   // READ ONE — find a single product by its id. Returns null if not found.

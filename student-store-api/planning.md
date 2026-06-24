@@ -252,6 +252,14 @@ _(Filled in as milestones are completed — schema translation notes, route beha
   `npx prisma` auto-fetched Prisma 7, which rejects the v6-style `datasource { url = ... }`.
   The CLI must match `@prisma/client@^6`.
 
+### Decisions Log — Query Params (Milestone 2)
+
+- **One `list()` handles every combination**: instead of separate functions, `Product.list()`
+  builds a Prisma query object dynamically — adding `where`/`orderBy` only when the param is
+  present. No params → empty query → returns all (backward compatible).
+- **Sort fields are whitelisted**: only `price` and `name` are honored; any other `sort` value
+  is ignored. Prevents arbitrary field names from reaching the query.
+
 ## Spec Reconciliation
 
 _(Schema audit in Milestone 4; full-system audit in Milestone 6.)_

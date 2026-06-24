@@ -19,10 +19,11 @@ app.get("/", (req, res) => {
 // PRODUCT ROUTES (Milestone 1)
 // ---------------------------------------------------------------------------
 
-// GET /products — list all products.
+// GET /products — list all products, with optional ?category= and ?sort= params.
 app.get("/products", async (req, res) => {
   try {
-    const products = await Product.list()
+    const { category, sort } = req.query
+    const products = await Product.list({ category, sort })
     res.status(200).json(products)
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch products" })
