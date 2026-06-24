@@ -104,7 +104,13 @@ General conventions:
 | DELETE | /products/:id   | Delete a product                 |
 
 **GET /products**
-- Request: no body. (Query params added in Milestone 2 — see that section.)
+- Request: no body.
+- Query Parameters (all optional):
+  - `category` — return only products in that category, e.g. `?category=Apparel`.
+  - `sort` — order results. `?sort=price` (low → high) or `?sort=name` (A → Z).
+  - Default (no params): return all products, unordered.
+  - Params can combine: `?category=Snacks&sort=price`.
+  - An unknown category simply returns an empty array `[]` (not an error).
 - Success: `200` → `[ {Product}, {Product}, ... ]`
 - Error: `500` → `{ "error": "..." }`
 
