@@ -260,6 +260,16 @@ _(Filled in as milestones are completed — schema translation notes, route beha
 - **Sort fields are whitelisted**: only `price` and `name` are honored; any other `sort` value
   is ignored. Prevents arbitrary field names from reaching the query.
 
+### Decisions Log — Order Model (Milestone 3)
+
+- **DB owns defaults**: `status` and `createdAt` are not required on create — the schema
+  defaults (`@default("pending")` and `@default(now())`) fill them in. `Order.create()` only
+  needs `customer` and `totalPrice`.
+- **Validation uses `=== undefined`, not `!`**: `customer`/`totalPrice` are numbers, and `0` is
+  falsy. `!totalPrice` would wrongly reject a `0` total, so presence is checked with
+  `=== undefined` instead.
+- **Route param is `:order_id`** (per the API contract), so handlers read `req.params.order_id`.
+
 ## Spec Reconciliation
 
 _(Schema audit in Milestone 4; full-system audit in Milestone 6.)_

@@ -25,3 +25,14 @@ model Product {
 
   @@map("products")
 }
+
+// Order: a single customer purchase. Order items get attached in Milestone 4.
+model Order {
+  id         Int      @id @default(autoincrement()) @map("order_id")
+  customer   Int      @map("customer_id")
+  totalPrice Float    @map("total_price")
+  status     String   @default("pending")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("orders")
+}

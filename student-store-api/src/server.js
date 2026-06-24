@@ -3,6 +3,7 @@
 
 const express = require("express")
 const Product = require("./models/product")
+const Order = require("./models/order")
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -87,6 +88,79 @@ app.delete("/products/:id", async (req, res) => {
       return res.status(404).json({ error: "Product not found" })
     }
     res.status(500).json({ error: "Failed to delete product" })
+  }
+})
+
+// ---------------------------------------------------------------------------
+// ORDER ROUTES (Milestone 3)
+// ---------------------------------------------------------------------------
+
+// GET /orders — list all orders.
+app.get("/orders", async (req, res) => {
+  try {
+    const orders = await Order.list()
+    res.status(200).json(orders)
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch orders" })
+  }
+})
+
+// GET /orders/:order_id — fetch a single order by id.
+app.get("/orders/:order_id", async (req, res) => {
+  try {
+    const order = await Order.getById(req.params.order_id)
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" })
+    }
+    res.status(200).json(order)
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch order" })
+  }
+})
+
+// POST /orders — create a new order.
+// (Milestone 5 will extend this to also create order items atomically.)
+app.post("/orders", async (req, res) => {
+  try {
+    const { customer, totalPrice, status } = req.body
+
+    // Basic validation: customer and totalPrice are required.
+    if (customer === undefined || totalPrice === undefined) {
+      return res.status(400).json({
+        error: "Missing required field(s): customer, totalPrice",
+      })
+    }
+
+    const order = await Order.create({ customer, totalPrice, status })
+    res.status(201).json(order)
+  } catch (err) {
+    res.status(500).json({ error: "Failed to create order" })
+  }
+})
+
+// PUT /orders/:order_id — update an existing order (e.g. change status).
+app.put("/orders/:order_id", async (req, res) => {
+  try {
+    const order = await Order.update(req.params.order_id, req.body)
+    res.status(200).json(order)
+  } catch (err) {
+    if (err.code === "P2025") {
+      return res.status(404).json({ error: "Order not found" })
+    }
+    res.status(500).json({ error: "Failed to update order" })
+  }
+})
+
+// DELETE /orders/:order_id — remove an order.
+app.delete("/orders/:order_id", async (req, res) => {
+  try {
+    const order = await Order.delete(req.params.order_id)
+    res.status(200).json({ message: "Order deleted", order })
+  } catch (err) {
+    if (err.code === "P2025") {
+      return res.status(404).json({ error: "Order not found" })
+    }
+    res.status(500).json({ error: "Failed to delete order" })
   }
 })
 
