@@ -1,77 +1,153 @@
+/* ===== ProductCard — polished e-commerce tile ===== */
+
 .ProductCard {
-  height: 330px;
   width: 250px;
   background: var(--pure-white);
   display: flex;
   flex-direction: column;
   border: solid 1px var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: transform var(--transition), box-shadow var(--transition),
+    border-color var(--transition);
 }
+
+.ProductCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--bright-green);
+}
+
+/* ----- Media (image fills top, rounded top corners) ----- */
 .ProductCard .media {
-  height: 250px;
   width: 100%;
+  height: 200px;
+  background: var(--surface-2);
+  overflow: hidden;
 }
+
+.ProductCard .media a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .ProductCard .media img {
-  height: 250px;
-  width: 248px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--transition);
 }
+
+.ProductCard:hover .media img {
+  transform: scale(1.04);
+}
+
+/* ----- Info row ----- */
 .ProductCard .product-info {
   flex: 1;
   display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 14px 16px;
   border-top: solid 1px var(--border-color);
 }
+
 .ProductCard .info {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  padding: 8px 12px;
+  gap: 4px;
 }
+
 .ProductCard .info .product-name {
+  margin: 0;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
+  color: var(--font-dark);
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
+
 .ProductCard .info .product-price {
+  margin: 0;
   font-size: 14px;
+  font-weight: 700;
+  color: var(--bright-green-dark);
 }
+
+/* ----- Actions column ----- */
 .ProductCard .actions {
-  width: 80px;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
 }
-.ProductCard .actions .quantity {
-  width: 80px;
+
+.ProductCard .actions .buttons {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
-  padding: 5px;
-}
-.ProductCard .actions .quantity .amt {
-  background: var(--accent-orange);
-  color: white;
-  width: 30px;
-  height: 20px;
-  border-radius: 4px;
-  display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 6px;
 }
-.ProductCard .actions .buttons {
-  width: 80px;
-  height: 100%;
 
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
-}
 .ProductCard .actions .buttons i {
-  width: 20px;
-  height: 20px;
-  border: solid 1px var(--bright-green);
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-pill);
+  border: solid 1px var(--border-color);
+  background: var(--surface-2);
   color: var(--bright-green);
+  font-size: 18px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5px;
-  margin: 10px 5px;
+  user-select: none;
+  transition: background var(--transition), color var(--transition),
+    border-color var(--transition), transform var(--transition);
+}
+
+.ProductCard .actions .buttons i:hover {
+  background: var(--bright-green);
+  border-color: var(--bright-green);
+  color: var(--pure-white);
+  transform: translateY(-1px);
+}
+
+.ProductCard .actions .buttons i:active {
+  transform: translateY(0);
+  background: var(--bright-green-dark);
+  border-color: var(--bright-green-dark);
+}
+
+/* ----- Quantity pill badge ----- */
+.ProductCard .actions .quantity {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.ProductCard .actions .quantity .amt {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-orange);
+  color: var(--pure-white);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
 }

@@ -1,10 +1,22 @@
+/* ============================================================
+   SubNavbar — clean sticky-feeling top bar
+   Search input + category buttons + Past Orders link
+   ============================================================ */
+
 .SubNavbar {
   width: 100%;
   max-width: 100vw;
   display: flex;
   flex-direction: column;
   padding: 0 var(--side-padding);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--pure-white);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
 }
+
 .SubNavbar .content {
   max-width: var(--content-width);
   width: 100%;
@@ -13,121 +25,172 @@
   flex-direction: column;
   padding-top: 20px;
 }
+
 .SubNavbar .content .row {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin: 20px 0;
+  margin: 16px 0;
 }
+
+/* ---------- Search bar ---------- */
 .SubNavbar .content .search-bar {
   display: flex;
   flex-direction: row;
   align-items: center;
   flex: 1;
   margin-right: 40px;
-  /* max-width: 500px; */
-  /* width: 100%; */
 }
+
 .SubNavbar .content .search-bar input {
-  height: 40px;
-  padding: 0 15px;
-  border-radius: 8px 0px 0px 8px;
-  border: solid 1px #e4e4e4;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  border: 1px solid var(--border-color);
+  border-right: none;
   flex: 1;
-  font-size: 16px;
-}
-.SubNavbar .content .search-bar i {
-  height: 40px;
-  width: 40px;
-  background: var(--bright-green);
-  color: white;
-  fill: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.SubNavbar .content .links {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  min-width: 400px;
-}
-
-.SubNavbar .content .help,
-.SubNavbar .content .auth a,
-.SubNavbar .content .cart a {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  font-weight: 500;
-}
-
-.SubNavbar .content .help i {
-  color: var(--muted);
-  margin-right: 10px;
-}
-
-.SubNavbar .content .auth a {
+  font-size: 15px;
+  font-family: inherit;
   color: var(--font-dark);
-  margin: 0 5px;
+  background: var(--surface-2);
+  outline: none;
+  transition: var(--transition);
 }
 
-.SubNavbar .content .cart {
-  color: var(--pure-white);
+.SubNavbar .content .search-bar input::placeholder {
+  color: var(--font-light);
+}
+
+.SubNavbar .content .search-bar input:hover {
+  background: var(--pure-white);
+  border-color: #d7dde7;
+}
+
+.SubNavbar .content .search-bar input:focus {
+  background: var(--pure-white);
+  border-color: var(--bright-green);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+/* Green search button attached to the input */
+.SubNavbar .content .search-bar i {
+  height: 44px;
+  width: 48px;
   background: var(--bright-green);
-  width: 170px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 20px;
-}
-.SubNavbar .content .cart i,
-.SubNavbar .content .cart a {
   color: var(--pure-white);
-  margin: 0 5px;
-}
-.SubNavbar .hamburger-menu {
-  margin-right: 40px;
-}
-.SubNavbar .hamburger-menu i {
+  fill: var(--pure-white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   cursor: pointer;
-  color: var(--muted);
+  font-size: 20px;
+  transition: var(--transition);
 }
+
+.SubNavbar .content .search-bar i:hover {
+  background: var(--bright-green-dark);
+}
+
+/* Keep the focus ring continuous across the attached button */
+.SubNavbar .content .search-bar input:focus + i {
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+/* ---------- Category menu ---------- */
 .SubNavbar .category-menu {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  justify-content: flex-start;
+  gap: 8px;
   flex: 1;
   list-style-type: none;
-  height: 40px;
+  margin: 0;
+  padding: 0;
+  height: 44px;
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: var(--transition);
 }
+
 .SubNavbar .category-menu.closed {
   opacity: 0;
 }
+
 .SubNavbar .category-menu.closed li button {
   transform: scale(0.01);
 }
-.SubNavbar .category-menu li.is-active button {
-  border-bottom: solid 2px var(--bright-green);
+
+.SubNavbar .category-menu li {
+  display: flex;
+  align-items: center;
 }
+
 .SubNavbar .category-menu li button {
   cursor: pointer;
-  transition: all 0.1s ease;
   border: none;
   background: transparent;
   outline: none;
-  font-weight: 500;
-  font-size: 18px;
-  padding-bottom: 10px;
-  border-bottom: solid 2px transparent;
-  transition: all 0.2s ease;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--font-light);
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  transition: var(--transition);
 }
+
+.SubNavbar .category-menu li button:hover {
+  color: var(--font-dark);
+  background: var(--grey-bg);
+}
+
 .SubNavbar .category-menu li button:active {
   transform: translateY(1px);
+}
+
+/* Active category — green pill */
+.SubNavbar .category-menu li.is-active button {
+  color: var(--pure-white);
+  background: var(--bright-green);
+  box-shadow: var(--shadow-sm);
+}
+
+.SubNavbar .category-menu li.is-active button:hover {
+  color: var(--pure-white);
+  background: var(--bright-green-dark);
+}
+
+/* ---------- Past Orders link — subtle button ---------- */
+.SubNavbar .category-menu li.orders-link {
+  margin-left: auto;
+}
+
+.SubNavbar .category-menu li.orders-link a {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--font-dark);
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-color);
+  background: var(--pure-white);
+  white-space: nowrap;
+  transition: var(--transition);
+}
+
+.SubNavbar .category-menu li.orders-link a:hover {
+  color: var(--bright-green-dark);
+  border-color: var(--bright-green);
+  background: var(--surface-2);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+.SubNavbar .category-menu li.orders-link a:active {
+  transform: translateY(0);
 }

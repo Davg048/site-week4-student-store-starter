@@ -1,24 +1,62 @@
+/* ShoppingCart — rendered inside the dark-blue Sidebar panel.
+   Goal: clean white "cards" (table + receipt) floating on the dark navy. */
+
 .ShoppingCart {
   width: 100%;
-  color: white;
+  color: var(--pure-white);
 }
+
 .ShoppingCart .open {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
   max-width: 550px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px 20px 8px;
 }
+
+/* ---- Heading ---- */
 .ShoppingCart .open > h3 {
-  color: white;
+  color: var(--pure-white);
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 4px;
 }
-.ShoppingCart .open > h3 > span {
-  margin-left: 10px;
+.ShoppingCart .open > h3 > .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: var(--bright-green);
+  color: var(--pure-white);
+  box-shadow: var(--shadow-sm);
 }
+.ShoppingCart .open > h3 > .button i {
+  color: var(--pure-white);
+}
+
+/* ---- Empty state ---- */
 .ShoppingCart .notification {
-  color: white;
+  color: rgba(255, 255, 255, 0.75);
   text-align: center;
-  margin: 10px;
+  font-size: 15px;
+  line-height: 1.5;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius);
+  padding: 22px 18px;
+  margin: 4px 0;
 }
+
+/* ---- Cart icon rail (closed state, if used) ---- */
 .ShoppingCart .cart-icons {
   display: flex;
   flex-direction: column;
@@ -30,23 +68,36 @@
 .ShoppingCart .cart-icon {
   margin-bottom: 16px;
 }
+
+/* ---- Cart table card ---- */
 .ShoppingCart .CartTable {
   width: 100%;
-  margin: 0 10px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
 }
+
 .ShoppingCart .CartTable .header {
   display: flex;
   flex-direction: column;
   background: var(--pure-white);
-  border: solid 1px var(--border-color);
-  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
   width: 100%;
+  overflow: hidden;
 }
+
+/* Header row sits on dark navy, capping the white card */
 .ShoppingCart .header-row {
   display: flex;
-  height: 50px;
+  align-items: center;
+  min-height: 48px;
   background: var(--dark-blue);
-  margin-bottom: 15px;
+  background: linear-gradient(180deg, var(--dark-blue-2), var(--dark-blue));
+  margin-bottom: 0;
+  padding: 0 16px;
 }
 .ShoppingCart .header-row span {
   flex: 1;
@@ -54,47 +105,75 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  font-size: 17px;
-  font-weight: 600;
-  margin-left: 15px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin-left: 0;
 }
 .ShoppingCart .header-row span.center {
-  display: flex;
   justify-content: center;
 }
 .ShoppingCart .flex-2 {
   flex: 2;
-  padding-left: 10px;
+  padding-left: 0;
 }
+
+/* Product rows */
 .ShoppingCart .product-row {
   display: flex;
   flex-direction: row;
-  padding-bottom: 20px;
-  margin-top: 10px;
-  border-bottom: solid 1px var(--border-color);
+  align-items: center;
+  padding: 14px 16px;
+  margin-top: 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 14px;
+  color: var(--font-dark);
+  transition: background var(--transition);
+}
+.ShoppingCart .product-row:last-child {
+  border-bottom: none;
+}
+.ShoppingCart .product-row:hover {
+  background: var(--surface-2);
 }
 .ShoppingCart .product-row span {
   flex: 1;
+  color: var(--font-dark);
+}
+.ShoppingCart .product-row span.flex-2 {
+  font-weight: 600;
 }
 .ShoppingCart .product-row span.center {
   display: flex;
   justify-content: center;
+  color: var(--font-light);
+}
+.ShoppingCart .product-row span.center:last-child {
+  color: var(--font-dark);
+  font-weight: 600;
 }
 
+/* ---- Receipt card ---- */
 .ShoppingCart .receipt {
   display: flex;
   flex-direction: column;
   background: var(--pure-white);
-  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
   width: 100%;
-  margin-top: 10px;
+  margin-top: 0;
+  padding: 8px 18px;
+  overflow: hidden;
 }
 .ShoppingCart .receipt span {
   flex: 1;
+  color: var(--font-dark);
 }
 .ShoppingCart .receipt span.center {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   font-weight: 600;
 }
 .ShoppingCart .receipt .receipt-subtotal,
@@ -103,12 +182,39 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 5px 0;
+  padding: 12px 0;
+  font-size: 14px;
 }
+.ShoppingCart .receipt .receipt-subtotal,
+.ShoppingCart .receipt .receipt-taxes {
+  color: var(--font-light);
+}
+.ShoppingCart .receipt .receipt-subtotal span,
+.ShoppingCart .receipt .receipt-taxes span {
+  color: var(--font-light);
+}
+.ShoppingCart .receipt .receipt-taxes {
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Emphasized total row */
 .ShoppingCart .receipt .receipt-total {
-  border-top: solid 1px var(--border-color);
+  border-top: none;
+  margin-top: 4px;
+  padding: 16px 0 12px;
 }
+.ShoppingCart .receipt .receipt-total .label {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--font-dark);
+}
+.ShoppingCart .receipt .receipt-total span.center {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--bright-green-dark);
+}
+
 .ShoppingCart .receipt .label {
   font-weight: 600;
-  padding-left: 10px;
+  padding-left: 0;
 }

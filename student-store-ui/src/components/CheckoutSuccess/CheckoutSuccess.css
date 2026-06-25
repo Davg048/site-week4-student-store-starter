@@ -1,49 +1,176 @@
 .CheckoutSuccess {
   width: 100%;
-  padding: 1rem;
+  padding: var(--gap) 0 0;
 }
 
+/* Section heading sits on the dark sidebar -> keep it light */
 .CheckoutSuccess > h3 {
-  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
+  color: var(--pure-white);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
-.CheckoutSuccess > h3 > span {
-  margin-left: 10px;
+.CheckoutSuccess > h3 > .icon.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: var(--bright-green);
+  color: var(--pure-white);
+  box-shadow: var(--shadow-sm);
 }
-.CheckoutSuccess p {
-  color: white;
+
+.CheckoutSuccess > h3 > .icon.button i {
+  color: var(--pure-white);
 }
+
+/* Success card — clean white surface that reads as a confirmation */
 .CheckoutSuccess .card {
-  color: white;
   display: flex;
   flex-direction: column;
+  margin-top: var(--gap);
+  overflow: hidden;
+  background: var(--pure-white);
+  border: 1px solid var(--border-color);
+  border-top: 3px solid var(--bright-green);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  color: var(--font-dark);
+  transition: transform var(--transition), box-shadow var(--transition);
 }
+
+.CheckoutSuccess .card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.CheckoutSuccess .card .card-head {
+  padding: 16px 22px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border-color);
+}
+
 .CheckoutSuccess .card .card-title {
-  color: white;
-  font-weight: 20px;
-  margin-bottom: 5px;
+  margin: 0;
+  color: var(--font-dark);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
-.CheckoutSuccess .purchase .header {
-  color: white;
-  font-weight: 600;
+
+.CheckoutSuccess .card .card-body {
+  padding: 22px;
+}
+
+/* Receipt contents */
+.CheckoutSuccess .purchase .header,
+.CheckoutSuccess .card-body > .header {
+  margin: 0 0 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--font-dark);
+  font-size: 16px;
+  font-weight: 700;
   text-align: center;
-  margin: 10px 0;
 }
+
 .CheckoutSuccess .purchase {
-  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
+
 .CheckoutSuccess .purchase li {
-  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--font-light);
+  font-size: 14px;
+  line-height: 1.5;
 }
-.CheckoutSuccess button {
-  margin: 10px;
-  padding: 12px 18px;
-  font-size: 18px;
+
+.CheckoutSuccess .purchase li:last-child {
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-color);
+  color: var(--font-dark);
+  font-weight: 700;
+}
+
+/* Card footer with action buttons */
+.CheckoutSuccess .card .card-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 16px 22px;
+  background: var(--surface-2);
+  border-top: 1px solid var(--border-color);
+}
+
+.CheckoutSuccess .card .card-foot .button {
+  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  padding: 0 18px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--pure-white);
+  color: var(--font-light);
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  background: transparent;
-  border: solid 1px white;
-  color: white;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition),
+    background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.CheckoutSuccess .card .card-foot .button:hover {
+  background: var(--surface-2);
+  color: var(--font-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.CheckoutSuccess .card .card-foot .button:active {
+  transform: translateY(0);
+}
+
+.CheckoutSuccess .card .card-foot .button.is-success {
+  border-color: transparent;
+  background: var(--bright-green);
+  color: var(--pure-white);
+}
+
+.CheckoutSuccess .card .card-foot .button.is-success:hover {
+  background: var(--bright-green-dark);
+  color: var(--pure-white);
+}
+
+/* Pre-checkout informational note (no receipt yet) — on dark sidebar */
+.CheckoutSuccess .content {
+  margin-top: var(--gap);
+  padding: 18px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.CheckoutSuccess .content p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  line-height: 1.6;
 }

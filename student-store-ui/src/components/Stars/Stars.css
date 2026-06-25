@@ -1,11 +1,25 @@
 .Stars {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
+  gap: 2px;
   height: 40px;
+  line-height: 1;
 }
 
+/* Filled / half stars pick up the warm accent token.
+   Empty stars set their own fill inline (var(--star-color-empty)),
+   which overrides this base color. */
 .Stars svg {
   height: 20px;
   width: 20px;
+  flex: none;
+  display: block;
+  fill: var(--star-color-filled);
+  transition: transform var(--transition), fill var(--transition);
+}
+
+/* Crisp, subtle lift on hover for an interactive, premium feel. */
+.Stars:hover svg {
+  transform: scale(1.06);
 }

@@ -1,47 +1,143 @@
+/* PaymentInfo — checkout form on the dark sidebar panel.
+   Inputs sit on the dark panel, so labels are light/white. */
+
 .PaymentInfo {
-  padding: 16px;
+  padding: var(--gap);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
+
+/* ---- Heading + icon badge ---- */
 .PaymentInfo > h3 {
-  color: white;
+  margin: 0;
+  color: var(--pure-white);
+  font-size: 19px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
 }
-.PaymentInfo > h3 > span {
-  margin-left: 10px;
+.PaymentInfo > h3 > span.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--bright-green);
+  color: var(--pure-white);
+  box-shadow: var(--shadow-sm);
 }
-.PaymentInfo .label {
-  color: white;
+.PaymentInfo > h3 > span.button .material-icons {
+  font-size: 24px;
+  line-height: 1;
 }
-.PaymentInfo .is-danger {
-  color: var(--bright-red);
-}
+
+/* ---- Fields ---- */
 .PaymentInfo .input-field {
   width: 100%;
-  margin: 5px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
 }
-.PaymentInfo .input-field .label {
-  color: white;
+
+.PaymentInfo .label {
+  color: var(--pure-white);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  opacity: 0.92;
 }
+
 .PaymentInfo .input-field .control {
   width: 100%;
-  margin: 5px 0;
+  margin: 0;
 }
-.PaymentInfo .input-field .control input {
+
+/* ---- Inputs ---- */
+.PaymentInfo .input-field .control input,
+.PaymentInfo .input {
   width: 100%;
-  height: 36px;
-  padding: 0 15px;
-  border-radius: 8px;
-  border: solid 1px #e4e4e4;
+  height: 44px;
+  padding: 0 14px;
   flex: 1;
-  font-size: 16px;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--font-dark);
+  background: var(--pure-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.PaymentInfo .input-field .control input::placeholder,
+.PaymentInfo .input::placeholder {
+  color: var(--font-light);
+}
+.PaymentInfo .input-field .control input:hover,
+.PaymentInfo .input:hover {
+  border-color: var(--bright-green);
+}
+.PaymentInfo .input-field .control input:focus,
+.PaymentInfo .input:focus {
+  outline: none;
+  border-color: var(--bright-green);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+}
+
+/* ---- Error text ---- */
+.PaymentInfo .is-danger {
+  margin: 0;
+  min-height: 18px;
+  color: var(--bright-red);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ---- Submit button ---- */
+.PaymentInfo .field {
+  margin: 0;
+}
+.PaymentInfo .field .control {
+  width: 100%;
 }
 .PaymentInfo button {
-  margin-top: 10px;
+  width: 100%;
+  margin: 0;
   padding: 12px 18px;
-  font-size: 18px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
   cursor: pointer;
-  background: transparent;
-  border: solid 1px white;
-  color: white;
+  color: var(--pure-white);
+  background: var(--bright-green);
+  border: none;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  transition: background var(--transition), transform var(--transition),
+    box-shadow var(--transition);
+}
+.PaymentInfo button:hover:not(:disabled) {
+  background: var(--bright-green-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+.PaymentInfo button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+.PaymentInfo button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.35);
+}
+.PaymentInfo button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
 }

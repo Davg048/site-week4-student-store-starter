@@ -1,29 +1,53 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
 
 :root {
+  /* layout */
   --side-padding: 40px;
-  --content-width: 1100px;
-  --dark-blue: #2c4047;
-  --bright-green: #00c385;
-  --pure-white: #fff;
-  --grey-bg: #f7f7f7;
-  --accent-orange: #ff9017;
-  --bright-red: #fe3210;
-  --muted: #969696;
-  --font-dark: #212121;
-  --font-light: #5b5b5b;
-  --border-color: #e4e4e4;
-  --star-color-filled: #e5a800;
+  --content-width: 1140px;
+
+  /* brand + surfaces (names kept for backwards-compat, values modernized) */
+  --dark-blue: #182433;        /* deep navy — nav, sidebar, table headers */
+  --dark-blue-2: #223247;      /* lighter navy for gradients/hover */
+  --bright-green: #10b981;     /* primary action / accent (emerald) */
+  --bright-green-dark: #059669;
+  --pure-white: #ffffff;
+  --grey-bg: #f1f4f8;          /* app background */
+  --surface-2: #f8fafc;        /* subtle inner surface */
+  --accent-orange: #f59e0b;
+  --bright-red: #ef4444;
+
+  /* text */
+  --muted: #9aa5b1;
+  --font-dark: #1b2735;
+  --font-light: #64748b;
+
+  /* lines + stars */
+  --border-color: #e6eaf0;
+  --star-color-filled: #f59e0b;
   --star-color-empty: #cbd4e6;
+
+  /* design tokens (new) */
+  --radius: 14px;
+  --radius-sm: 9px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.08);
+  --shadow-md: 0 4px 12px rgba(16, 24, 40, 0.08), 0 2px 6px rgba(16, 24, 40, 0.05);
+  --shadow-lg: 0 16px 40px rgba(16, 24, 40, 0.14);
+  --transition: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  --gap: 20px;
 }
 
 body {
   margin: 0;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
-    "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: var(--grey-bg);
+  color: var(--font-dark);
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(16, 185, 129, 0.06), transparent 60%),
+    radial-gradient(900px 500px at -10% 0%, rgba(34, 50, 71, 0.05), transparent 55%),
+    var(--grey-bg);
+  background-attachment: fixed;
 }
 
 code {
@@ -45,57 +69,84 @@ h4,
 h5,
 h6,
 ul,
-ol {
+ol,
+button,
+input,
+table,
+th,
+td {
   margin: 0;
   padding: 0;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
-    "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
   color: var(--font-dark);
 }
 
+h1 { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; }
+h2 { font-size: 24px; font-weight: 700; letter-spacing: -0.01em; }
+h3 { font-size: 19px; font-weight: 700; }
+
 a {
   text-decoration: none;
-  color: var(--bright-green);
+  color: var(--bright-green-dark);
 }
 
-@media screen and (max-width: 1100px) {
-  :root {
-    --content-width: 900px;
-  }
+/* shared, reusable primitives — components can use these directly */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 18px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--bright-green);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+.btn:hover { background: var(--bright-green-dark); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.btn:active { transform: translateY(0); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+.btn-ghost { background: transparent; color: var(--font-light); box-shadow: none; border: 1px solid var(--border-color); }
+.btn-ghost:hover { background: var(--surface-2); color: var(--font-dark); }
+
+.card {
+  background: var(--pure-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
 }
 
-@media screen and (max-width: 1000px) {
-  :root {
-    --content-width: 800px;
-  }
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
 }
+.pill.pending { background: #fef3c7; color: #92400e; }
+.pill.completed { background: #d1fae5; color: #065f46; }
+.pill.cancelled { background: #fee2e2; color: #991b1b; }
 
-/* Rules for sizing the icon. */
-.material-icons.md-18 {
-  font-size: 18px;
-}
-.material-icons.md-24 {
-  font-size: 24px;
-}
-.material-icons.md-36 {
-  font-size: 36px;
-}
-.material-icons.md-48 {
-  font-size: 40px;
-}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(100, 116, 139, 0.35); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(100, 116, 139, 0.55); }
 
-/* Rules for using icons as black on a light background. */
-.material-icons.md-dark {
-  color: rgba(0, 0, 0, 0.54);
-}
-.material-icons.md-dark.md-inactive {
-  color: rgba(0, 0, 0, 0.26);
-}
+@media screen and (max-width: 1100px) { :root { --content-width: 940px; } }
+@media screen and (max-width: 1000px) { :root { --content-width: 820px; } }
 
-/* Rules for using icons as white on a dark background. */
-.material-icons.md-light {
-  color: rgba(255, 255, 255, 1);
-}
-.material-icons.md-light.md-inactive {
-  color: rgba(255, 255, 255, 0.3);
-}
+/* Material icon sizing (kept from original) */
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 40px; }
+.material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
+.material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
+.material-icons.md-light { color: rgba(255, 255, 255, 1); }
+.material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
