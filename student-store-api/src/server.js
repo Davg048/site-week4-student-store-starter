@@ -2,12 +2,16 @@
 // The entry point for the Student Store backend.
 
 const express = require("express")
+const cors = require("cors")
 const Product = require("./models/product")
 const Order = require("./models/order")
 const OrderItem = require("./models/orderItem")
 
 const app = express()
 const PORT = process.env.PORT || 3001
+
+// Allow the browser-based frontend (a different origin/port) to call this API.
+app.use(cors())
 
 // Parse incoming JSON request bodies into req.body for every POST/PUT request.
 app.use(express.json())

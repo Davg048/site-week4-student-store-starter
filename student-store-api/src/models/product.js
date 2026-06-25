@@ -6,6 +6,14 @@
 
 const prisma = require("../db/db")
 
+// The frontend reads `product.image_url` (snake_case). Our model field is `imageUrl`.
+// This helper returns the product with BOTH keys so the API is backward-compatible
+// and the frontend works untouched. Returns null/undefined unchanged.
+function withImageUrl(product) {
+  if (!product) return product
+  return { ...product, image_url: product.imageUrl }
+}
+
 class Product {
   // READ ALL — return products, optionally filtered by category and/or sorted.
   // options: { category?: string, sort?: "price" | "name" }
@@ -23,14 +31,16 @@ class Product {
       query.orderBy = { [sort]: "asc" }
     }
 
-    return await prisma.product.findMany(query)
+    const products = await prisma.product.findMany(query)
+    return products.map(withImageUrl)
   }
 
   // READ ONE — find a single product by its id. Returns null if not found.
   static async getById(id) {
-    return await prisma.product.findUnique({
+    const product = await prisma.product.findUnique({
       where: { id: Number(id) },
     })
+    return withImageUrl(product)
   }
 
   // CREATE — insert a new product row and return it.

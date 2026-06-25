@@ -312,6 +312,49 @@ _(Filled in as milestones are completed — schema translation notes, route beha
 
 _(Full-system audit in Milestone 6.)_
 
-### Known frontend reconciliation items (to resolve in Milestone 6)
-- Frontend `ProductDetail.jsx` reads `product.image_url` (snake_case) but our API returns
-  `imageUrl` (camelCase). Decide in M6: rename in API response, or adjust the frontend.
+### Frontend Requirements Audit — Milestone 6
+
+The provided frontend ships as a skeleton: `axios` is imported but the three API calls are
+unimplemented. Audit of every needed call vs. the API contract:
+
+| Need | File | Endpoint | Status in starter |
+|------|------|----------|-------------------|
+| Load all products | `App.jsx` | `GET /products` | missing (no useEffect) |
+| Load one product | `ProductDetail.jsx` | `GET /products/:id` | missing (no useEffect) |
+| Place order | `App.jsx` `handleOnCheckout` | `POST /orders` | empty function |
+
+Mismatches found and resolutions:
+- **image field**: frontend reads `product.image_url` (`ProductCard.jsx`, `ProductDetail.jsx`);
+  API returns `imageUrl`. **Resolution: API returns BOTH** `imageUrl` and `image_url` (add
+  `image_url` to product responses) so the frontend works untouched and the API stays
+  backward-compatible.
+- **API base URL**: not configured in the frontend. **Resolution:** add a constant pointing at
+  `http://localhost:3001`.
+- **checkout body**: cart is `{ productId: quantity }`; API wants
+  `{ customer, items: [{ productId, quantity }] }`. **Resolution:** transform cart → items in
+  `handleOnCheckout`.
+- **customer type**: form collects name/email (strings); `customer` column is `Int`.
+  **Resolution (project scope):** send a hardcoded placeholder integer (e.g. `1`) on checkout.
+  Real customer accounts are out of scope.
+- **CORS**: browser (`:5173`) → API (`:3001`) is cross-origin. **Resolution:** enable `cors`
+  middleware in `server.js`.
+
+## Final Spec Reconciliation: Project Complete
+
+### Full-system audit result
+- All 12 endpoints match the API contract (5 product, 5 order, 2 order-item).
+- `POST /orders` creates an order + items atomically; verified a bad `productId` returns 404
+  with no partial order written.
+- Found: spec didn't document CORS — added `app.use(cors())` and noted it here.
+
+### Gaps resolved during frontend integration
+- Frontend read `product.image_url`; API returned `imageUrl` → API now returns BOTH keys.
+- Frontend had no implemented API calls → wired `GET /products`, `GET /products/:id`,
+  and `POST /orders` (cart → items transform, placeholder integer `customer`).
+- `SubNavbar` category buttons changed filter state but not the route → added
+  `useNavigate("/")` so selecting a category returns to the product grid.
+
+### What the spec enabled during this project
+- Writing the data model, API contract, and transaction flow up front meant each milestone was
+  "translate the plan into code" rather than "design while coding." The transaction flow in
+  particular was implemented almost directly from the Section 3 spec.

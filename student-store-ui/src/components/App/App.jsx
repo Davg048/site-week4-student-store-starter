@@ -9,6 +9,9 @@ import NotFound from "../NotFound/NotFound";
 import { removeFromCart, addToCart, getQuantityOfItemInCart, getTotalItemsInCart } from "../../utils/cart";
 import "./App.css";
 
+// Base URL of our backend API (the Express server from Milestones 0–5).
+const API_BASE_URL = "http://localhost:3001";
+
 function App() {
 
   // State variables
@@ -36,8 +39,48 @@ function App() {
     setSearchInputValue(event.target.value);
   };
 
+  // On first render, fetch all products from the API and store them in state.
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setIsFetching(true);
+      setError(null);
+      try {
+        const response = await axios.get(`${API_BASE_URL}/products`);
+        setProducts(response.data);
+      } catch (err) {
+        setError("Failed to load products.");
+      } finally {
+        setIsFetching(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Turn the cart object { productId: quantity } into the items array the API expects,
+  // then POST the order. On success, store the returned order to show the receipt.
   const handleOnCheckout = async () => {
-  }
+    setIsCheckingOut(true);
+    setError(null);
+    try {
+      const items = Object.keys(cart).map((productId) => ({
+        productId: Number(productId),
+        quantity: cart[productId],
+      }));
+
+      const response = await axios.post(`${API_BASE_URL}/orders`, {
+        customer: 1, // placeholder customer id (real accounts are out of scope)
+        items,
+      });
+
+      setOrder(response.data);
+      setCart({});
+    } catch (err) {
+      setError("Checkout failed. Please try again.");
+    } finally {
+      setIsCheckingOut(false);
+    }
+  };
 
 
   return (
