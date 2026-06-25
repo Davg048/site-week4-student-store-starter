@@ -1,0 +1,172 @@
+.OrderDetail {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px 20px 60px;
+}
+
+/* Back link — subtle ghost-style affordance that slides on hover */
+.OrderDetail .back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
+  padding: 6px 12px 6px 10px;
+  border-radius: var(--radius-pill);
+  color: var(--font-light);
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--surface-2);
+  border: 1px solid var(--border-color);
+  transition: color var(--transition), background var(--transition),
+    transform var(--transition), box-shadow var(--transition);
+}
+
+.OrderDetail .back-link:hover {
+  color: var(--font-dark);
+  background: var(--pure-white);
+  transform: translateX(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.OrderDetail h1 {
+  margin-bottom: 14px;
+}
+
+/* Order meta row — date / email / status chips */
+.OrderDetail .order-meta {
+  display: flex;
+  gap: 12px 24px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 28px;
+  color: var(--font-light);
+  font-size: 14px;
+}
+
+.OrderDetail .order-meta > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.OrderDetail .error {
+  color: var(--bright-red);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+/* Items table — soft card surface, rounded corners, gentle row hover */
+.OrderDetail .items-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--pure-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 16px;
+  transition: box-shadow var(--transition);
+}
+
+.OrderDetail .items-table:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.OrderDetail .items-table th,
+.OrderDetail .items-table td {
+  padding: 14px 18px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.OrderDetail .items-table thead th {
+  background: var(--surface-2);
+  color: var(--font-light);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.OrderDetail .items-table tbody td {
+  font-size: 15px;
+  color: var(--font-dark);
+}
+
+.OrderDetail .items-table tbody tr {
+  transition: background var(--transition);
+}
+
+.OrderDetail .items-table tbody tr:hover {
+  background: var(--surface-2);
+}
+
+.OrderDetail .items-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* First column (item name) reads as the row's primary label */
+.OrderDetail .items-table tbody td:first-child {
+  font-weight: 600;
+}
+
+/* Numeric columns align right for a clean ledger feel */
+.OrderDetail .items-table th:nth-child(2),
+.OrderDetail .items-table th:nth-child(3),
+.OrderDetail .items-table th:nth-child(4),
+.OrderDetail .items-table td:nth-child(2),
+.OrderDetail .items-table td:nth-child(3),
+.OrderDetail .items-table td:nth-child(4) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Emphasized total bar — dark navy gradient, bright total value */
+.OrderDetail .order-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--dark-blue), var(--dark-blue-2));
+  box-shadow: var(--shadow-md);
+}
+
+.OrderDetail .order-total > span:first-child {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.OrderDetail .order-total > span:last-child {
+  color: var(--bright-green);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Status chip — mirrors the global .pill primitive for consistency */
+.OrderDetail .status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.OrderDetail .status.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.OrderDetail .status.completed {
+  background: #d1fae5;
+  color: #065f46;
+}

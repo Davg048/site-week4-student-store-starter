@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 import "./SubNavbar.css"
 
 function SubNavbar({ activeCategory, setActiveCategory, searchInputValue, handleOnSearchInputChange }) {
@@ -40,6 +40,9 @@ function SubNavbar({ activeCategory, setActiveCategory, searchInputValue, handle
                 <button onClick={() => handleCategoryClick(cat)}>{cat}</button>
               </li>
             ))}
+            <li className="orders-link">
+              <Link to="/orders">Past Orders</Link>
+            </li>
           </ul>
         </div>
         

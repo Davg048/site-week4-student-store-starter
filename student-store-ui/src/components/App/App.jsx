@@ -5,6 +5,8 @@ import SubNavbar from "../SubNavbar/SubNavbar";
 import Sidebar from "../Sidebar/Sidebar";
 import Home from "../Home/Home";
 import ProductDetail from "../ProductDetail/ProductDetail";
+import PastOrders from "../PastOrders/PastOrders";
+import OrderDetail from "../OrderDetail/OrderDetail";
 import NotFound from "../NotFound/NotFound";
 import { removeFromCart, addToCart, getQuantityOfItemInCart, getTotalItemsInCart } from "../../utils/cart";
 import "./App.css";
@@ -70,6 +72,7 @@ function App() {
 
       const response = await axios.post(`${API_BASE_URL}/orders`, {
         customer: 1, // placeholder customer id (real accounts are out of scope)
+        email: userInfo.email || null, // lets the Past Orders page filter by email
         items,
       });
 
@@ -127,6 +130,8 @@ function App() {
                 />
               }
             />
+            <Route path="/orders" element={<PastOrders />} />
+            <Route path="/orders/:orderId" element={<OrderDetail />} />
             <Route
               path="/:productId"
               element={

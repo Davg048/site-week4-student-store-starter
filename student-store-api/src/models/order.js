@@ -10,8 +10,11 @@ const prisma = require("../db/db")
 
 class Order {
   // READ ALL — return every order.
-  static async list() {
-    return await prisma.order.findMany()
+  // READ ALL — optionally filter by the email the order was placed with.
+  static async list({ email } = {}) {
+    const query = {}
+    if (email) query.where = { email }
+    return await prisma.order.findMany(query)
   }
 
   // READ ONE — find a single order by id, WITH its order items nested in.
@@ -40,7 +43,7 @@ class Order {
   // Looks up real prices from the DB, computes the total, and creates the
   // order + all its items atomically. If any item references a missing
   // product, it throws BEFORE the transaction so nothing is written.
-  static async createWithItems({ customer, status, items }) {
+  static async createWithItems({ customer, email, status, items }) {
     // Step 2 (spec): look up every referenced product in one query.
     const productIds = items.map((item) => Number(item.productId))
     const products = await prisma.product.findMany({
@@ -73,7 +76,7 @@ class Order {
     // If any operation throws, the whole thing rolls back — no partial order.
     return await prisma.$transaction(async (tx) => {
       const order = await tx.order.create({
-        data: { customer, status, totalPrice },
+        data: { customer, email, status, totalPrice },
       })
 
       await tx.orderItem.createMany({

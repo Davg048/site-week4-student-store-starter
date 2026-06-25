@@ -103,7 +103,8 @@ app.delete("/products/:id", async (req, res) => {
 // GET /orders — list all orders.
 app.get("/orders", async (req, res) => {
   try {
-    const orders = await Order.list()
+    const { email } = req.query
+    const orders = await Order.list({ email })
     res.status(200).json(orders)
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch orders" })
@@ -128,7 +129,7 @@ app.get("/orders/:order_id", async (req, res) => {
 // The server looks up real prices and computes the total — the client never sends them.
 app.post("/orders", async (req, res) => {
   try {
-    const { customer, status, items } = req.body
+    const { customer, email, status, items } = req.body
 
     // Validate: customer is required, and items must be a non-empty array.
     if (customer === undefined) {
@@ -138,7 +139,7 @@ app.post("/orders", async (req, res) => {
       return res.status(400).json({ error: "Order must include at least one item" })
     }
 
-    const order = await Order.createWithItems({ customer, status, items })
+    const order = await Order.createWithItems({ customer, email, status, items })
     res.status(201).json(order)
   } catch (err) {
     // A nonexistent productId is caught before the transaction → 404, nothing saved.

@@ -41,6 +41,7 @@ between an order and the products it contains.
 |-------------|-------------|-------------|-----------|------------------|---------------------------------------------|
 | id          | Int         | order_id    | yes (PK)  | autoincrement    | Primary key, auto-generated                 |
 | customer    | Int         | customer_id | yes       | —                | Customer identifier (matches seed.js)       |
+| email       | String?     | email       | optional  | —                | Email of the person who placed the order (stretch: filter by email) |
 | totalPrice  | Float       | total_price | yes       | —                | Computed server-side at order creation      |
 | status      | String      | status      | yes       | `"pending"`      | e.g. "pending", "completed"                 |
 | createdAt   | DateTime    | created_at  | yes       | `now()`          | Auto-stamped when the row is created        |
@@ -150,6 +151,9 @@ General conventions:
 | DELETE | /orders/:order_id   | Delete an order (cascades to its items)       |
 
 **GET /orders**
+- Query Parameters (optional):
+  - `email` — return only orders placed with that email, e.g. `?email=sam@school.edu`.
+    Default (no param): return all orders. An email with no matching orders returns `[]`.
 - Success: `200` → `[ {Order}, ... ]`
 - Error: `500` → `{ "error": "..." }`
 
@@ -163,6 +167,7 @@ General conventions:
   ```json
   {
     "customer": 101,
+    "email": "sam@school.edu",
     "status": "pending",
     "items": [
       { "productId": 1, "quantity": 2 },
@@ -358,3 +363,20 @@ Mismatches found and resolutions:
 - Writing the data model, API contract, and transaction flow up front meant each milestone was
   "translate the plan into code" rather than "design while coding." The transaction flow in
   particular was implemented almost directly from the Section 3 spec.
+
+## Stretch Features
+
+### Filter Orders by email + Past Orders page
+- Added optional `email String?` to the Order model (migration `add_order_email`).
+- `GET /orders?email=...` filters via a conditional `where` (same dynamic-query pattern as the
+  product category filter); no email → all orders; unknown email → `[]`.
+- Checkout (`POST /orders`) now forwards `email` from the cart form.
+- Frontend: new `PastOrders` page (list with email filter input + "No orders found" empty state)
+  and `OrderDetail` page (line items, quantities, costs, total). Routes for `/orders` and
+  `/orders/:orderId` are declared BEFORE the `/:productId` catch-all so they aren't swallowed.
+  Reached via a "Past Orders" link in the SubNavbar.
+
+### UI polish
+- Introduced a design system in `globals.css` (modern color palette, radius/shadow/transition
+  tokens, shared `.btn`/`.card`/`.pill` primitives) and restyled every component CSS against it
+  for a cohesive, modern e-commerce look. Existing CSS variable names were kept so nothing broke.

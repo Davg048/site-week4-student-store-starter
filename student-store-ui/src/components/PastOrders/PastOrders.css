@@ -1,0 +1,220 @@
+/* ============================================================
+   PastOrders — Orders list page
+   Filter bar + clean card-style orders table.
+   Aligned to the global design system (globals.css).
+   ============================================================ */
+
+.PastOrders {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px 64px;
+}
+
+.PastOrders h1 {
+  margin-bottom: 8px;
+  color: var(--font-dark);
+}
+
+/* ---------- Filter bar ---------------------------------------------------- */
+
+.PastOrders .filter-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin: 24px 0 16px;
+  flex-wrap: wrap;
+}
+
+.PastOrders .filter-bar input {
+  flex: 1;
+  min-width: 220px;
+  height: 42px;
+  padding: 0 14px;
+  font-size: 15px;
+  color: var(--font-dark);
+  background: var(--pure-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.PastOrders .filter-bar input::placeholder {
+  color: var(--muted);
+}
+
+.PastOrders .filter-bar input:focus {
+  outline: none;
+  border-color: var(--bright-green);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.16);
+}
+
+/* Primary "Filter" button — matches the global .btn look */
+.PastOrders .filter-bar button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  padding: 0 20px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--bright-green);
+  border: none;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition),
+    background var(--transition), color var(--transition);
+}
+
+.PastOrders .filter-bar button:hover {
+  background: var(--bright-green-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.PastOrders .filter-bar button:active {
+  transform: translateY(0);
+}
+
+.PastOrders .filter-bar button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
+}
+
+/* Secondary "Show all" button — ghost style */
+.PastOrders .filter-bar button.clear {
+  background: transparent;
+  color: var(--font-light);
+  border: 1px solid var(--border-color);
+  box-shadow: none;
+}
+
+.PastOrders .filter-bar button.clear:hover {
+  background: var(--surface-2);
+  color: var(--font-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---------- Filter note / status messages -------------------------------- */
+
+.PastOrders .filter-note {
+  margin-bottom: 18px;
+  font-size: 14px;
+  color: var(--font-light);
+}
+
+.PastOrders .filter-note strong {
+  color: var(--font-dark);
+  font-weight: 600;
+}
+
+.PastOrders .error {
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--bright-red);
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: var(--radius-sm);
+}
+
+/* ---------- Empty state --------------------------------------------------- */
+
+.PastOrders .empty {
+  padding: 56px 24px;
+  text-align: center;
+  font-size: 15px;
+  color: var(--font-light);
+  background: var(--surface-2);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius);
+}
+
+/* ---------- Orders table (card-style) ------------------------------------ */
+
+.orders-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--pure-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.orders-table th,
+.orders-table td {
+  padding: 14px 18px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Header row */
+.orders-table thead th {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--font-light);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Body rows */
+.orders-table tbody td {
+  font-size: 15px;
+  color: var(--font-dark);
+}
+
+.orders-table tbody tr {
+  transition: background var(--transition);
+}
+
+.orders-table tbody tr:hover {
+  background: var(--surface-2);
+}
+
+.orders-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Order ID link */
+.orders-table a {
+  color: var(--bright-green-dark);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.orders-table a:hover {
+  color: var(--bright-green);
+  text-decoration: underline;
+}
+
+/* ---------- Status pills -------------------------------------------------- */
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status.completed {
+  background: #d1fae5;
+  color: #065f46;
+}
