@@ -119,22 +119,28 @@ app.get("/orders/:order_id", async (req, res) => {
   }
 })
 
-// POST /orders — create a new order.
-// (Milestone 5 will extend this to also create order items atomically.)
+// POST /orders — create an order AND all its items, atomically (Milestone 5).
+// Body: { customer, status?, items: [ { productId, quantity }, ... ] }
+// The server looks up real prices and computes the total — the client never sends them.
 app.post("/orders", async (req, res) => {
   try {
-    const { customer, totalPrice, status } = req.body
+    const { customer, status, items } = req.body
 
-    // Basic validation: customer and totalPrice are required.
-    if (customer === undefined || totalPrice === undefined) {
-      return res.status(400).json({
-        error: "Missing required field(s): customer, totalPrice",
-      })
+    // Validate: customer is required, and items must be a non-empty array.
+    if (customer === undefined) {
+      return res.status(400).json({ error: "Missing required field: customer" })
+    }
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: "Order must include at least one item" })
     }
 
-    const order = await Order.create({ customer, totalPrice, status })
+    const order = await Order.createWithItems({ customer, status, items })
     res.status(201).json(order)
   } catch (err) {
+    // A nonexistent productId is caught before the transaction → 404, nothing saved.
+    if (err.code === "PRODUCT_NOT_FOUND") {
+      return res.status(404).json({ error: err.message })
+    }
     res.status(500).json({ error: "Failed to create order" })
   }
 })

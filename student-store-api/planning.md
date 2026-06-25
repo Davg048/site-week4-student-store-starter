@@ -270,6 +270,23 @@ _(Filled in as milestones are completed — schema translation notes, route beha
   `=== undefined` instead.
 - **Route param is `:order_id`** (per the API contract), so handlers read `req.params.order_id`.
 
+### Decisions Log — Order Creation Transaction (Milestone 5)
+
+- **What the Transactional Flow spec got right**: the step order (validate → look up products →
+  compute total → write inside a transaction) translated almost directly into code. Pre-checking
+  products *before* opening the transaction kept the error path clean.
+- **What the spec refined during implementation**: the spec said "look up products" but not how to
+  detect a missing one. Implemented as a `Map` of id→price plus a presence check that throws a
+  typed `PRODUCT_NOT_FOUND` error, which the route maps to 404. Items are inserted with `createMany`
+  rather than one-by-one. Prices/total are computed from DB prices, never the client.
+- **How the transaction error handling works**: everything inside
+  `prisma.$transaction(async (tx) => {...})` uses the `tx` client; if any write throws, Prisma
+  rolls back every write in the block, so a failure leaves zero rows. The nonexistent-product case
+  is caught *before* the transaction opens, so no order is ever started.
+- **One thing I'd design differently**: also re-validate product existence inside the transaction
+  (belt-and-suspenders) to guard the race where a product is deleted between the lookup and the
+  write. For this project scope the pre-check is sufficient.
+
 ## Spec Reconciliation
 
 ### Spec Reconciliation — Milestone 4 (Schema Audit)
