@@ -1,0 +1,133 @@
+{
+  "info": {
+    "name": "Student Store API — Demo",
+    "description": "Pre-built requests for the CodePath demo, in click-through order. Base URL: http://localhost:3001",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. GET /products (all)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:3001/products", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["products"] }
+      }
+    },
+    {
+      "name": "2. GET /products?category=Apparel  (query param demo)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3001/products?category=Apparel",
+          "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["products"],
+          "query": [{ "key": "category", "value": "Apparel" }]
+        }
+      }
+    },
+    {
+      "name": "3. GET /products?sort=price  (sort demo)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3001/products?sort=price",
+          "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["products"],
+          "query": [{ "key": "sort", "value": "price" }]
+        }
+      }
+    },
+    {
+      "name": "4. GET /products/1 (one product)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:3001/products/1", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["products", "1"] }
+      }
+    },
+    {
+      "name": "5. POST /products (create)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"CodePath Sticker\",\n  \"description\": \"Vinyl laptop sticker\",\n  \"price\": 3.50,\n  \"imageUrl\": \"https://example.com/sticker.png\",\n  \"category\": \"Accessories\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": { "raw": "http://localhost:3001/products", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["products"] }
+      }
+    },
+    {
+      "name": "6. GET /orders (all)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:3001/orders", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders"] }
+      }
+    },
+    {
+      "name": "7. POST /orders  ⭐ SUCCESS (server computes total)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customer\": 101,\n  \"items\": [\n    { \"productId\": 1, \"quantity\": 2 },\n    { \"productId\": 4, \"quantity\": 1 }\n  ]\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": { "raw": "http://localhost:3001/orders", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders"] }
+      }
+    },
+    {
+      "name": "8. POST /orders  ⭐ FAILURE (bad product -> 404, NOTHING saved)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customer\": 102,\n  \"items\": [\n    { \"productId\": 1, \"quantity\": 1 },\n    { \"productId\": 9999, \"quantity\": 1 }\n  ]\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": { "raw": "http://localhost:3001/orders", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders"] }
+      }
+    },
+    {
+      "name": "9. GET /orders/:id (order WITH nested items)  — use a real id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:3001/orders/1", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders", "1"] }
+      }
+    },
+    {
+      "name": "10. PUT /orders/:id (change status)  — use a real id",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"completed\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": { "raw": "http://localhost:3001/orders/1", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders", "1"] }
+      }
+    },
+    {
+      "name": "11. DELETE /orders/:id (cascades to items)  — use a real id",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": { "raw": "http://localhost:3001/orders/1", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders", "1"] }
+      }
+    },
+    {
+      "name": "12. GET /order-items (all)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:3001/order-items", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["order-items"] }
+      }
+    }
+  ]
+}
