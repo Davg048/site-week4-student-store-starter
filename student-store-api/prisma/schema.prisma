@@ -23,6 +23,9 @@ model Product {
   imageUrl    String? @map("image_url")
   category    String
 
+  // Back-relation: one product can appear in many order items.
+  orderItems  OrderItem[]
+
   @@map("products")
 }
 
@@ -34,5 +37,25 @@ model Order {
   status     String   @default("pending")
   createdAt  DateTime @default(now()) @map("created_at")
 
+  // Back-relation: one order is made up of many order items.
+  orderItems OrderItem[]
+
   @@map("orders")
+}
+
+// OrderItem: one line in an order — "this many of this product, at this price".
+// Sits at the intersection of two relationships: it belongs to one Order AND one Product.
+model OrderItem {
+  id        Int   @id @default(autoincrement()) @map("order_item_id")
+  orderId   Int   @map("order_id")
+  productId Int   @map("product_id")
+  quantity  Int
+  price     Float
+
+  // Foreign key to Order. Deleting the order cascades to (deletes) its items.
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  // Foreign key to Product. Deleting the product cascades to (deletes) items referencing it.
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("order_items")
 }

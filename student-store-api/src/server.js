@@ -4,6 +4,7 @@
 const express = require("express")
 const Product = require("./models/product")
 const Order = require("./models/order")
+const OrderItem = require("./models/orderItem")
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -161,6 +162,53 @@ app.delete("/orders/:order_id", async (req, res) => {
       return res.status(404).json({ error: "Order not found" })
     }
     res.status(500).json({ error: "Failed to delete order" })
+  }
+})
+
+// ---------------------------------------------------------------------------
+// ORDER ITEM ROUTES (Milestone 4)
+// ---------------------------------------------------------------------------
+
+// GET /order-items — list every order item in the database.
+app.get("/order-items", async (req, res) => {
+  try {
+    const items = await OrderItem.list()
+    res.status(200).json(items)
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch order items" })
+  }
+})
+
+// POST /orders/:order_id/items — add a single item to an existing order.
+app.post("/orders/:order_id/items", async (req, res) => {
+  try {
+    const { productId, quantity, price } = req.body
+
+    if (productId === undefined || quantity === undefined || price === undefined) {
+      return res.status(400).json({
+        error: "Missing required field(s): productId, quantity, price",
+      })
+    }
+
+    // The parent order must exist before we attach an item to it.
+    const order = await Order.getById(req.params.order_id)
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" })
+    }
+
+    const item = await OrderItem.create({
+      orderId: req.params.order_id,
+      productId,
+      quantity,
+      price,
+    })
+    res.status(201).json(item)
+  } catch (err) {
+    // P2003 = foreign key constraint failed (e.g. productId doesn't exist).
+    if (err.code === "P2003") {
+      return res.status(404).json({ error: "Referenced product does not exist" })
+    }
+    res.status(500).json({ error: "Failed to create order item" })
   }
 })
 

@@ -14,10 +14,16 @@ class Order {
     return await prisma.order.findMany()
   }
 
-  // READ ONE — find a single order by id. Returns null if not found.
+  // READ ONE — find a single order by id, WITH its order items nested in.
+  // `include` pulls the related order_items rows (and each item's product) in one query.
   static async getById(id) {
     return await prisma.order.findUnique({
       where: { id: Number(id) },
+      include: {
+        orderItems: {
+          include: { product: true },
+        },
+      },
     })
   }
 

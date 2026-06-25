@@ -272,7 +272,28 @@ _(Filled in as milestones are completed — schema translation notes, route beha
 
 ## Spec Reconciliation
 
-_(Schema audit in Milestone 4; full-system audit in Milestone 6.)_
+### Spec Reconciliation — Milestone 4 (Schema Audit)
+
+#### Schema vs. spec gaps found
+- No gaps found — the `OrderItem` schema matched the spec exactly: PK `id`→`order_item_id`,
+  FK `orderId`→`order_id`, FK `productId`→`product_id`, plus `quantity` and snapshot `price`.
+- Both relations declared with reciprocal back-relations (`Product.orderItems`,
+  `Order.orderItems`), as Prisma requires. `npx prisma validate` confirmed the schema is valid
+  before migrating.
+
+#### Cascade delete verification
+- Deleting a Product removes associated OrderItems: ✅ tested (script + via API)
+- Deleting an Order removes associated OrderItems: ✅ tested (script + via DELETE /orders/:id)
+- Confirmed deleting a Product does NOT delete the Order itself — only the join rows.
+
+#### Notes
+- `Order.getById` now uses `include` to eager-load `orderItems` and each item's `product`,
+  returning a nested order → items → product shape.
+- Added two endpoints to reach order items (also satisfy stretch "Added Endpoints"):
+  `GET /order-items` and `POST /orders/:order_id/items` (validates parent order exists;
+  maps Prisma `P2003` FK violation to 404 for a nonexistent product).
+
+_(Full-system audit in Milestone 6.)_
 
 ### Known frontend reconciliation items (to resolve in Milestone 6)
 - Frontend `ProductDetail.jsx` reads `product.image_url` (snake_case) but our API returns
