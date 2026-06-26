@@ -2,9 +2,9 @@
 
 ## Unit Assignment: Student Store
 
-Submitted by: **David Gonzalez-Cesar**
+Submitted by: David Gonzalez-Cesar
 
-Deployed Application (optional): [Student Store Deployed Site](ADD_LINK_HERE)
+Deployed Application (optional): _Not deployed — runs locally._
 
 ### Application Features
 
@@ -100,21 +100,22 @@ Deployed Application (optional): [Student Store Deployed Site](ADD_LINK_HERE)
 
 ### Walkthrough Video
 
-`ADD_EMBEDDED_CODE_HERE`
+<div style="position: relative; padding-bottom: 64.55089820359281%; height: 0;"><iframe src="https://www.loom.com/embed/75233516a705404db72e50498fa0d14e" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 
 ### Reflection
 
 * Did the topics discussed in your labs prepare you to complete the assignment? Be specific, which features in your weekly assignment did you feel unprepared to complete?
 
-Add your response here
+I think the labs were helpful to a certain extent, of course I didnt have enough time to finish them all since i felt it would lead to me falling behind in the project so i had to research some stuff during the project work (understanding cascading and cors)
+
 
 * If you had more time, what would you have done differently? Would you have added additional features? Changed the way your project responded to a particular event, etc.
   
-Add your response here
+  I would add a better UI, make it more interactive for users, adjust the cart interaction for users.
 
 * Reflect on your project demo, what went well? Were there things that maybe didn't go as planned? Did you notice something that your peer did that you would like to try next time?
 
-Add your response here
+I forgot to keep my local host active, so it ruined the way i plannd out my presentation but i was able to get it working almost instantly again. I would love to have had more time to prep but i only really have myself to blame for that
 
 ### Open-source libraries used
 
@@ -130,4 +131,4 @@ Add your response here
 
 ### Shout out
 
-Add your shout out here.
+Devarsh, claude, gemeni, google
