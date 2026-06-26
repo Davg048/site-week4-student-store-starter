@@ -1,20 +1,30 @@
 {
   "info": {
-    "name": "Student Store API — Demo",
-    "description": "Pre-built requests for the CodePath demo, in click-through order. Base URL: http://localhost:3001",
+    "name": "Student Store — Demo (run top to bottom)",
+    "description": "Recording-ready collection. Reset demo data first (products ids 1-9, orders ids 1-3). Then run each request top to bottom. The two CASCADE deletes are LAST so they don't disturb earlier steps — refresh Prisma Studio after each. Base URL: http://localhost:3001",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "1. GET /products (all)",
+      "name": "01  GET /products  — all products (expect 200, 9 items)",
       "request": {
         "method": "GET",
         "header": [],
-        "url": { "raw": "http://localhost:3001/products", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["products"] }
+        "url": { "raw": "http://localhost:3001/products", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["products"] },
+        "description": "Fetch all products. Expect 200 and an array of 9, each with image_url."
       }
     },
     {
-      "name": "2. GET /products?category=Apparel  (query param demo)",
+      "name": "02  GET /products/1  — one product (expect 200)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:3001/products/1", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["products", "1"] },
+        "description": "Fetch product #1 (College Hoodie). Expect 200."
+      }
+    },
+    {
+      "name": "03  GET /products?category=Apparel  — filter (expect 200, 2 items)",
       "request": {
         "method": "GET",
         "header": [],
@@ -22,31 +32,12 @@
           "raw": "http://localhost:3001/products?category=Apparel",
           "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["products"],
           "query": [{ "key": "category", "value": "Apparel" }]
-        }
+        },
+        "description": "Query-param filter. Expect 200 with only Apparel products (Hoodie + Beanie)."
       }
     },
     {
-      "name": "3. GET /products?sort=price  (sort demo)",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3001/products?sort=price",
-          "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["products"],
-          "query": [{ "key": "sort", "value": "price" }]
-        }
-      }
-    },
-    {
-      "name": "4. GET /products/1 (one product)",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": { "raw": "http://localhost:3001/products/1", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["products", "1"] }
-      }
-    },
-    {
-      "name": "5. POST /products (create)",
+      "name": "04  POST /products  — create (expect 201, new id 10)",
       "request": {
         "method": "POST",
         "header": [{ "key": "Content-Type", "value": "application/json" }],
@@ -55,53 +46,81 @@
           "raw": "{\n  \"name\": \"CodePath Sticker\",\n  \"description\": \"Vinyl laptop sticker\",\n  \"price\": 3.50,\n  \"imageUrl\": \"https://example.com/sticker.png\",\n  \"category\": \"Accessories\"\n}",
           "options": { "raw": { "language": "json" } }
         },
-        "url": { "raw": "http://localhost:3001/products", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["products"] }
+        "url": { "raw": "http://localhost:3001/products", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["products"] },
+        "description": "Create a product. Expect 201. After a clean reset this becomes id 10 (used by steps 05 and 06)."
       }
     },
     {
-      "name": "6. GET /orders (all)",
+      "name": "05  PUT /products/10  — update (expect 200, price now 4.99)",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"price\": 4.99\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": { "raw": "http://localhost:3001/products/10", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["products", "10"] },
+        "description": "Update the product created in step 04. Expect 200 with price 4.99."
+      }
+    },
+    {
+      "name": "06  DELETE /products/10  — delete the new product (expect 200)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": { "raw": "http://localhost:3001/products/10", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["products", "10"] },
+        "description": "Delete the product from step 04. Expect 200. (This is the simple delete; the cascade delete is step 13.)"
+      }
+    },
+    {
+      "name": "07  GET /orders  — all orders (expect 200, 3 orders)",
       "request": {
         "method": "GET",
         "header": [],
-        "url": { "raw": "http://localhost:3001/orders", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders"] }
+        "url": { "raw": "http://localhost:3001/orders", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders"] },
+        "description": "Fetch all orders. Expect 200 with the 3 seeded orders (sam / jordan / alex)."
       }
     },
     {
-      "name": "7. POST /orders  ⭐ SUCCESS (server computes total)",
+      "name": "08  GET /orders/1  — one order WITH nested items (expect 200)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:3001/orders/1", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders", "1"] },
+        "description": "Fetch order #1. Expect 200 with orderItems nested inside (2x Hoodie + 1x Pen), each with its product."
+      }
+    },
+    {
+      "name": "09  POST /orders  ⭐ SUCCESS — server computes total (expect 201, id 4)",
       "request": {
         "method": "POST",
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"customer\": 101,\n  \"items\": [\n    { \"productId\": 1, \"quantity\": 2 },\n    { \"productId\": 4, \"quantity\": 1 }\n  ]\n}",
+          "raw": "{\n  \"customer\": 4,\n  \"email\": \"demo@school.edu\",\n  \"items\": [\n    { \"productId\": 1, \"quantity\": 2 },\n    { \"productId\": 4, \"quantity\": 1 }\n  ]\n}",
           "options": { "raw": { "language": "json" } }
         },
-        "url": { "raw": "http://localhost:3001/orders", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders"] }
+        "url": { "raw": "http://localhost:3001/orders", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders"] },
+        "description": "Create an order. Note: NO prices sent — the server looks them up and computes totalPrice. Expect 201, totalPrice 61.97, items nested. After a clean reset this becomes order id 4 (used by steps 11 and 12)."
       }
     },
     {
-      "name": "8. POST /orders  ⭐ FAILURE (bad product -> 404, NOTHING saved)",
+      "name": "10  POST /orders  ⭐ FAILURE — bad product → 404, nothing saved",
       "request": {
         "method": "POST",
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"customer\": 102,\n  \"items\": [\n    { \"productId\": 1, \"quantity\": 1 },\n    { \"productId\": 9999, \"quantity\": 1 }\n  ]\n}",
+          "raw": "{\n  \"customer\": 9,\n  \"items\": [\n    { \"productId\": 1, \"quantity\": 1 },\n    { \"productId\": 9999, \"quantity\": 1 }\n  ]\n}",
           "options": { "raw": { "language": "json" } }
         },
-        "url": { "raw": "http://localhost:3001/orders", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders"] }
+        "url": { "raw": "http://localhost:3001/orders", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders"] },
+        "description": "THE ATOMICITY DEMO. One item points to a product that doesn't exist. Expect 404. Then re-run step 07 (GET /orders) to show NO partial order was created — the transaction rolled back."
       }
     },
     {
-      "name": "9. GET /orders/:id (order WITH nested items)  — use a real id",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": { "raw": "http://localhost:3001/orders/1", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders", "1"] }
-      }
-    },
-    {
-      "name": "10. PUT /orders/:id (change status)  — use a real id",
+      "name": "11  PUT /orders/4  — change status (expect 200, completed)",
       "request": {
         "method": "PUT",
         "header": [{ "key": "Content-Type", "value": "application/json" }],
@@ -110,23 +129,62 @@
           "raw": "{\n  \"status\": \"completed\"\n}",
           "options": { "raw": { "language": "json" } }
         },
-        "url": { "raw": "http://localhost:3001/orders/1", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders", "1"] }
+        "url": { "raw": "http://localhost:3001/orders/4", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders", "4"] },
+        "description": "Update the order created in step 09 to 'completed'. Expect 200."
       }
     },
     {
-      "name": "11. DELETE /orders/:id (cascades to items)  — use a real id",
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": { "raw": "http://localhost:3001/orders/1", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders", "1"] }
-      }
-    },
-    {
-      "name": "12. GET /order-items (all)",
+      "name": "12  GET /order-items  — all order items (expect 200) [stretch]",
       "request": {
         "method": "GET",
         "header": [],
-        "url": { "raw": "http://localhost:3001/order-items", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["order-items"] }
+        "url": { "raw": "http://localhost:3001/order-items", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["order-items"] },
+        "description": "Stretch endpoint. Fetch every order item in the database. Expect 200."
+      }
+    },
+    {
+      "name": "13  POST /orders/4/items  — add an item to an order (expect 201) [stretch]",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"productId\": 5,\n  \"quantity\": 1,\n  \"price\": 9.99\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": { "raw": "http://localhost:3001/orders/4/items", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders", "4", "items"] },
+        "description": "Stretch endpoint. Add a single item (College Mug) to order #4. Expect 201."
+      }
+    },
+    {
+      "name": "14  GET /orders?email=demo@school.edu  — filter by email (expect 200) [stretch]",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3001/orders?email=demo@school.edu",
+          "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders"],
+          "query": [{ "key": "email", "value": "demo@school.edu" }]
+        },
+        "description": "Stretch: filter orders by email. Expect 200 with only the order(s) for demo@school.edu. Try a fake email to see an empty array []."
+      }
+    },
+    {
+      "name": "15  ⭐ DELETE /orders/2  — CASCADE: order + items gone (refresh Prisma Studio)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": { "raw": "http://localhost:3001/orders/2", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["orders", "2"] },
+        "description": "CASCADE DEMO #1. Delete order #2 (jordan, 1 item). Expect 200. THEN switch to Prisma Studio and click refresh on OrderItem — that order's item is gone automatically (onDelete: Cascade)."
+      }
+    },
+    {
+      "name": "16  ⭐ DELETE /products/1  — CASCADE: order 1's item gone (refresh Prisma Studio)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": { "raw": "http://localhost:3001/products/1", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["products", "1"] },
+        "description": "CASCADE DEMO #2. Delete product #1 (Hoodie), which order #1 references. Expect 200. THEN refresh Prisma Studio's OrderItem table — order 1's hoodie line item is gone, because deleting a product cascades to its order items."
       }
     }
   ]
